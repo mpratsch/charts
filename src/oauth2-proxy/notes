@@ -1,0 +1,16 @@
+2018/08/29 18:26:32 oauthproxy.go:541: 100.124.0.3:56296 ("100.127.0.0") error redeeming code token exchange: oauth2: cannot fetch token: 400 Bad Request
+Response: {"error_description":"Authorization code is invalid or expired.","error":"invalid_grant"}
+2018/08/29 18:26:32 oauthproxy.go:359: ErrorPage 500 Internal Error Internal Error
+100.127.0.0 - - [29/Aug/2018:18:26:32 +0000] dashboard.temp.servicegrid.cloud GET - "/oauth2/callback?code=H5VXNZHuFVj3BzOwgCaTvKI6dsqFDxaQt78u2QBm&state=928907c442163fb6e7c95ff0e4cdbd4f%3A%2F" HTTP/1.1 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36" 500 331 0.168a
+
+
+https://dashboard.temp.servicegrid.cloud/oauth2/callback
+dashboard-sso-temp-servicegrid-clouda
+
+    nginx.ingress.kubernetes.io/auth-signin: "https://{{ $dnsShortname }}.{{ $dnsDomain }}/oauth2/start?rd=$request_uri"
+    nginx.ingress.kubernetes.io/auth-url: "https://{{ $dnsShortname }}.{{ $dnsDomain }}/oaut2/auth"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      auth_request_set $user   $upstream_http_x_auth_request_user;
+      auth_request_set $email  $upstream_http_x_auth_request_email;
+      proxy_set_header X-User  $user;
+      proxy_set_header X-Email $email;
